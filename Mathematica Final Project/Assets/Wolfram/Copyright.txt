@@ -1,0 +1,5 @@
+Wolfram Assets
+Version: 1.0
+(c) Copyright Wolfram Research, Inc.
+http://www.wolfram.com
+

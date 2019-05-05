@@ -1,0 +1,615 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     28580,        607]
+NotebookOptionsPosition[     26538,        570]
+NotebookOutlinePosition[     26879,        585]
+CellTagsIndexPosition[     26836,        582]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Final Project: Sail Simulator", "Title",
+ CellChangeTimes->{{3.766072635083923*^9, 
+  3.7660726474117365`*^9}},ExpressionUUID->"d140c120-0b25-439e-8ab1-\
+dacfd14fdd54"],
+
+Cell["Matt Graber", "Subtitle",
+ CellChangeTimes->{{3.7660726571367073`*^9, 
+  3.766072659041317*^9}},ExpressionUUID->"469f5eec-b85e-4ba3-91ab-\
+4ecb83ac333d"],
+
+Cell[TextData[{
+ "This project is a demonstration of what can be done with Mathematica 12\
+\[CloseCurlyQuote]s Unity integration. You will need both Unity and \
+Mathematica 12 to be installed on your computer for this to work. If you don\
+\[CloseCurlyQuote]t have these, ",
+ ButtonBox["here's a demo video",
+  BaseStyle->"Hyperlink",
+  ButtonData->{
+    URL["https://youtu.be/C_RSfQAHW6c"], None},
+  ButtonNote->"https://youtu.be/C_RSfQAHW6c"],
+ ".\n\nThe basic outline of the project is as follows: In Unity, you type a \
+valid function of two variables into the input box (using Mathematica \
+syntax), and then a 3D mesh will appear in Unity based on the given function. \
+The mesh that is generated is meant to be a stand-in for a \
+\[OpenCurlyDoubleQuote]sail\[CloseCurlyDoubleQuote] made in that shape. You \
+can click the \[OpenCurlyDoubleQuote]Enable/Disable Right/Left Wind\
+\[CloseCurlyDoubleQuote] buttons in Unity to control where the \
+\[OpenCurlyDoubleQuote]wind\[CloseCurlyDoubleQuote] is blown from. The \
+\[OpenCurlyDoubleQuote]wind\[CloseCurlyDoubleQuote] in this project is \
+represented by a flurry of small particles that are fired with a speed of 50 \
+at your mesh (give them a few moments to reach the mesh). The current \
+distance from the origin, velocity, and acceleration of the mesh are all \
+displayed in the corner.\n\nWhen you feel like it, you can click the \
+\[OpenCurlyDoubleQuote]Reset Position\[CloseCurlyDoubleQuote] button, which \
+clears the scene of all air particles and moves the mesh back to the origin. \
+Then, switch windows to Mathematica, and click the \
+\[OpenCurlyDoubleQuote]Show Graph In Unity\[CloseCurlyDoubleQuote] to show \
+the graph of the mesh\[CloseCurlyQuote]s position, velocity, and acceleration \
+since last reset. When you are done viewing the graph, click the \
+\[OpenCurlyDoubleQuote]Hide and Reset Graph In Unity\[CloseCurlyDoubleQuote] \
+button in Mathematica to stop displaying the graph in Unity and clear all the \
+data.\n\nAn interesting thing to note are that if you have a surface like the \
+default Sin[x]^2 + Cos[x]^2 (in which both sides are approximately the same) \
+and you turn on both winds simultaneously, the surface will stay \
+approximately at the origin. However, if you have a surface like x^2 + y^2, \
+which is visualized almost as a sort of torpedo, it will move in the \
+direction that the \[OpenCurlyDoubleQuote]torpedo\[CloseCurlyDoubleQuote] is \
+pointing, as that side is more aerodynamic."
+}], "Text",
+ CellChangeTimes->{{3.7660726762362833`*^9, 3.766072677507507*^9}, {
+  3.766072748807712*^9, 3.766072871090537*^9}, {3.766073755449969*^9, 
+  3.766073863250684*^9}, {3.766073926760014*^9, 3.766073987726916*^9}, {
+  3.7660741232630224`*^9, 3.7660747641464877`*^9}, {3.766074796568635*^9, 
+  3.7660748237699904`*^9}, {3.766079682747735*^9, 3.766079715692447*^9}, {
+  3.766079749630551*^9, 3.7660797496315503`*^9}, {3.7660797951031675`*^9, 
+  3.7660798319434814`*^9}},ExpressionUUID->"5c13bb2d-0951-4591-bbc6-\
+e9017ae1e7c1"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"SetDirectory", "[", 
+    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+    "If", " ", "this", " ", "is", " ", "your", " ", "first", " ", "time", " ",
+      "using", " ", "UnityLink"}], ",", " ", 
+    RowBox[{
+    "you", " ", "may", " ", "need", " ", "to", " ", "execute", " ", 
+     "\"\<<< UnityLink`\>\"", " ", "before", " ", "doing", " ", "anything", 
+     " ", "else"}]}], " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Needs", "[", "\"\<UnityLink`\>\"", "]"}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Change", " ", "the", " ", "\"\<$UnityExecutable\>\"", " ", "path", " ", 
+    "string", " ", "to", " ", "wherever", " ", "you", " ", "keep", " ", 
+    "your", " ", "Unity", " ", "editor"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "$UnityExecutable", " ", "=", " ", 
+   "\"\<C:/Program Files/Unity/Hub/Editor/2018.3.12f1/Editor/Unity.exe\>\""}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PosPoints", " ", "=", " ", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"VelPoints", " ", "=", " ", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"AccelPoints", " ", "=", " ", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LineData", "=", "ListLinePlot"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"UnityOpen", "[", "\"\<Mathematica Final Project\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"OpenUnityScene", "[", "\"\<Sail\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Button", "[", 
+  RowBox[{"\"\<Show Graph In Unity\>\"", ",", 
+   RowBox[{"UpdateGraphic", "[", "]"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Button", "[", 
+  RowBox[{"\"\<Hide and Reset Graph In Unity\>\"", ",", 
+   RowBox[{"HideGraphic", "[", "]"}]}], "]"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7659785499795322`*^9, 3.7659785591338496`*^9}, {
+   3.7659828740306425`*^9, 3.765982878890991*^9}, {3.765982967057121*^9, 
+   3.7659829682047143`*^9}, {3.7659833066971617`*^9, 3.765983308006544*^9}, {
+   3.766008200281764*^9, 3.7660082342708344`*^9}, {3.766008283444558*^9, 
+   3.7660082974709187`*^9}, {3.7660083281410327`*^9, 3.766008374788306*^9}, {
+   3.7660161712886934`*^9, 3.7660161715720263`*^9}, {3.7660634191767955`*^9, 
+   3.7660634194756107`*^9}, {3.766063696050362*^9, 3.7660637186925983`*^9}, {
+   3.766063773213416*^9, 3.7660638146537447`*^9}, {3.766064210579746*^9, 
+   3.7660642363687673`*^9}, {3.766064520777095*^9, 3.7660645209215155`*^9}, {
+   3.766072702340532*^9, 3.7660727402093835`*^9}, 3.766072796289557*^9, {
+   3.7660728804736757`*^9, 3.766072927539097*^9}, {3.7660730017131147`*^9, 
+   3.7660730670850286`*^9}, {3.7660794554527845`*^9, 3.7660794584139614`*^9}},
+ CellLabel->"In[34]:=",ExpressionUUID->"4443e51f-0fd0-4f2b-9a45-2b50c8d07437"],
+
+Cell[BoxData[
+ ButtonBox["\<\"Show Graph In Unity\"\>",
+  Appearance->Automatic,
+  ButtonFunction:>$CellContext`UpdateGraphic[],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Output",
+ CellChangeTimes->{
+  3.7660083797152724`*^9, {3.766016594452035*^9, 3.7660166156279945`*^9}, {
+   3.766016963111616*^9, 3.7660169639980707`*^9}, 3.7660230462106147`*^9, 
+   3.76602309030737*^9, {3.7660583133524847`*^9, 3.7660583142127776`*^9}, {
+   3.7660588417597475`*^9, 3.766058842657154*^9}, {3.766061780169172*^9, 
+   3.766061781279929*^9}, {3.7660627338802996`*^9, 3.7660627348519444`*^9}, {
+   3.766063280000029*^9, 3.7660632811473475`*^9}, {3.7660634395114317`*^9, 
+   3.76606346897696*^9}, 3.766063775311616*^9, {3.766063947155263*^9, 
+   3.766063972538048*^9}, 3.7660642422606263`*^9, 3.766064530457361*^9, 
+   3.7660647663756924`*^9, 3.766064797071837*^9, 3.7660655082584887`*^9, 
+   3.7660662034649496`*^9, 3.766066235031453*^9, {3.766066366497267*^9, 
+   3.766066392488998*^9}, 3.7660667266398354`*^9, 3.7660667590303507`*^9, {
+   3.7660679243408155`*^9, 3.766067951149948*^9}, {3.766072713052025*^9, 
+   3.76607274128541*^9}, 3.766072799714369*^9, 3.766072882040725*^9, {
+   3.7660730538944683`*^9, 3.766073068564424*^9}, {3.766075403135558*^9, 
+   3.7660754065251584`*^9}, {3.766076425358387*^9, 3.766076427282204*^9}, {
+   3.76607966614565*^9, 3.7660796682933545`*^9}, 3.7660798977119946`*^9},
+ CellLabel->"Out[43]=",ExpressionUUID->"f5f388ff-fe8d-4f38-be73-9e7da34e52e5"],
+
+Cell[BoxData[
+ ButtonBox["\<\"Hide and Reset Graph In Unity\"\>",
+  Appearance->Automatic,
+  ButtonFunction:>$CellContext`HideGraphic[],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Output",
+ CellChangeTimes->{
+  3.7660083797152724`*^9, {3.766016594452035*^9, 3.7660166156279945`*^9}, {
+   3.766016963111616*^9, 3.7660169639980707`*^9}, 3.7660230462106147`*^9, 
+   3.76602309030737*^9, {3.7660583133524847`*^9, 3.7660583142127776`*^9}, {
+   3.7660588417597475`*^9, 3.766058842657154*^9}, {3.766061780169172*^9, 
+   3.766061781279929*^9}, {3.7660627338802996`*^9, 3.7660627348519444`*^9}, {
+   3.766063280000029*^9, 3.7660632811473475`*^9}, {3.7660634395114317`*^9, 
+   3.76606346897696*^9}, 3.766063775311616*^9, {3.766063947155263*^9, 
+   3.766063972538048*^9}, 3.7660642422606263`*^9, 3.766064530457361*^9, 
+   3.7660647663756924`*^9, 3.766064797071837*^9, 3.7660655082584887`*^9, 
+   3.7660662034649496`*^9, 3.766066235031453*^9, {3.766066366497267*^9, 
+   3.766066392488998*^9}, 3.7660667266398354`*^9, 3.7660667590303507`*^9, {
+   3.7660679243408155`*^9, 3.766067951149948*^9}, {3.766072713052025*^9, 
+   3.76607274128541*^9}, 3.766072799714369*^9, 3.766072882040725*^9, {
+   3.7660730538944683`*^9, 3.766073068564424*^9}, {3.766075403135558*^9, 
+   3.7660754065251584`*^9}, {3.766076425358387*^9, 3.766076427282204*^9}, {
+   3.76607966614565*^9, 3.7660796682933545`*^9}, 3.76607989771999*^9},
+ CellLabel->"Out[44]=",ExpressionUUID->"1467053d-d39a-430e-a300-b7ed9f0e2621"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Methods", "Subsection",
+ CellChangeTimes->{{3.765983582848776*^9, 
+  3.7659836108005695`*^9}},ExpressionUUID->"6cac3c09-8748-4513-8d05-\
+4b824f551372"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Creates", " ", "a", " ", "mesh", " ", "in", " ", "Unity", " ", "based", 
+    " ", "on", " ", "the", " ", "given", " ", "string"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Plot3DInUnity", "[", "expr_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"gm", ",", " ", "rb", ",", "tr", ",", "mat", ",", "mc"}], "}"}],
+      ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"DeleteUnityGameObject", "[", "\"\<gamePlot\>\"", "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"gm", " ", "=", " ", 
+       RowBox[{"CreateUnityGameObject", "[", 
+        RowBox[{"\"\<gamePlot\>\"", ",", 
+         RowBox[{"CreateUnityMesh", "[", 
+          RowBox[{"\"\<Plotted\>\"", ",", 
+           RowBox[{"Plot3D", "[", 
+            RowBox[{
+             RowBox[{"ToExpression", "[", "expr", "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"x", ",", 
+               RowBox[{"-", "10"}], ",", "10"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"y", ",", 
+               RowBox[{"-", "10"}], ",", "10"}], "}"}]}], "]"}]}], "]"}]}], 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"rb", "=", 
+       RowBox[{"CreateUnityRigidbody", "[", "gm", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetProperty", "[", 
+       RowBox[{"rb", ",", " ", 
+        RowBox[{"\"\<UseGravity\>\"", "\[Rule]", "False"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"tr", "=", 
+       RowBox[{"FindUnityComponent", "[", 
+        RowBox[{"gm", ",", "\"\<Transform\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetProperty", "[", 
+       RowBox[{"tr", ",", 
+        RowBox[{"\"\<EulerAngles\>\"", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"90.", ",", "0.", ",", "0."}], "}"}]}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"mat", " ", "=", " ", 
+       RowBox[{"FindUnityAsset", "[", "\"\<Sail Material\>\"", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetProperty", "[", 
+       RowBox[{"gm", ",", 
+        RowBox[{"\"\<SharedMaterial\>\"", "\[Rule]", "mat"}]}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetProperty", "[", 
+       RowBox[{"gm", ",", " ", 
+        RowBox[{"\"\<Tag\>\"", "\[Rule]", " ", "\"\<Sail\>\""}]}], "]"}], ";",
+       "\[IndentingNewLine]", 
+      RowBox[{"mc", " ", "=", " ", 
+       RowBox[{"FindUnityComponent", "[", 
+        RowBox[{"gm", ",", "\"\<MeshCollider\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetProperty", "[", 
+       RowBox[{"mc", ",", 
+        RowBox[{"\"\<Convex\>\"", "\[Rule]", "True"}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.765986990626415*^9, 3.76598699906913*^9}, {
+   3.7659872135270157`*^9, 3.765987217571637*^9}, {3.7659872611789255`*^9, 
+   3.7659872732401733`*^9}, 3.7659875775157423`*^9, {3.7659876133886175`*^9, 
+   3.7659876809615445`*^9}, {3.7659914605923433`*^9, 3.765991516795188*^9}, {
+   3.7659943031105022`*^9, 3.7659943096759377`*^9}, {3.76599455598211*^9, 
+   3.7659945606295905`*^9}, {3.765997739946481*^9, 3.765997740232952*^9}, {
+   3.766003693936647*^9, 3.7660037470857215`*^9}, {3.7660039134280586`*^9, 
+   3.7660039585284142`*^9}, 3.766004403690846*^9, {3.7660044456481047`*^9, 
+   3.7660044781432276`*^9}, {3.7660045237489805`*^9, 
+   3.7660045596110764`*^9}, {3.766004621985038*^9, 3.766004636939345*^9}, {
+   3.7660046900756764`*^9, 3.7660047003331223`*^9}, {3.766004758822736*^9, 
+   3.766004820249775*^9}, {3.766004886631342*^9, 3.766004887696103*^9}, {
+   3.766005075902481*^9, 3.7660051007912784`*^9}, {3.7660051953957973`*^9, 
+   3.7660053235614743`*^9}, {3.7660054077333665`*^9, 
+   3.7660054332888927`*^9}, {3.766005504865374*^9, 3.766005545837845*^9}, {
+   3.7660071100949783`*^9, 3.766007122622238*^9}, {3.766007472153248*^9, 
+   3.7660075380993996`*^9}, {3.7660075691738105`*^9, 3.766007575297512*^9}, {
+   3.766007676833009*^9, 3.7660077244502106`*^9}, {3.766007829806552*^9, 
+   3.766007849009192*^9}, {3.7660080495317454`*^9, 3.7660080753853235`*^9}, {
+   3.7660085491570973`*^9, 3.76600855402538*^9}, {3.766008908831754*^9, 
+   3.7660089880089254`*^9}, {3.7660108680515647`*^9, 
+   3.7660108985535307`*^9}, {3.766011006655375*^9, 3.7660110141373453`*^9}, {
+   3.7660153114345474`*^9, 3.7660153137930937`*^9}, 3.766016004526366*^9, {
+   3.766072362869219*^9, 3.7660723650572443`*^9}},
+ CellLabel->"In[45]:=",ExpressionUUID->"037108af-6e7a-4fff-bb0b-9142f976fee0"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Initializes", " ", "the", " ", "scene", " ", "with", " ", "this", " ", 
+    "surface"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"Plot3DInUnity", "[", "\"\<Sin[x]^2 + Cos[y]^2\>\"", "]"}], 
+  " "}]], "Input",
+ CellChangeTimes->{{3.7660080846484766`*^9, 3.7660081001656837`*^9}, {
+  3.766009059846099*^9, 3.7660090605383053`*^9}, {3.7660126238800693`*^9, 
+  3.766012663747773*^9}, {3.7660730910860553`*^9, 3.766073141562112*^9}},
+ CellLabel->"In[46]:=",ExpressionUUID->"d70e4bc5-f897-4688-a552-4c06977fc129"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Helper", " ", "functions", " ", "for", " ", "clearing", " ", "the", " ", 
+    "three", " ", "lists", " ", "of", " ", "data", " ", "points"}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"ResetPosPoints", "[", "]"}], ":=", 
+   RowBox[{"PosPoints", " ", "=", " ", 
+    RowBox[{"{", "}"}], " "}]}]}]], "Input",
+ CellChangeTimes->{{3.766015819770186*^9, 3.7660158377047167`*^9}, {
+  3.766073127286476*^9, 3.7660731837464743`*^9}},
+ CellLabel->"In[47]:=",ExpressionUUID->"4ba801ba-fc97-4532-a3fc-bcf526c9f69a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ResetVelPoints", "[", "]"}], ":=", 
+  RowBox[{"VelPoints", " ", "=", " ", 
+   RowBox[{"{", "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.766016215575126*^9, 3.7660162251122932`*^9}},
+ CellLabel->"In[48]:=",ExpressionUUID->"2fc24077-1065-4cd0-84d1-9ba0e764f232"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ResetAccelPoints", "[", "]"}], ":=", 
+  RowBox[{"AccelPoints", " ", "=", " ", 
+   RowBox[{"{", "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.766016219719617*^9, 3.7660162331860933`*^9}},
+ CellLabel->"In[49]:=",ExpressionUUID->"aa68553a-abff-4a74-83f6-e5957ff4e01e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "Functions", " ", "for", " ", "adding", " ", "values", " ", "to", " ", 
+     "each", " ", "of", " ", "the", " ", "three", " ", "lists"}], ",", " ", 
+    RowBox[{"to", " ", "be", " ", "called", " ", "from", " ", "Unity"}]}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"AddPos", "[", "z_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"PosPoints", ",", "z"}], "\[IndentingNewLine]", "]"}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.7660155298352427`*^9, 3.7660155988280277`*^9}, {
+  3.76601567887298*^9, 3.766015799815014*^9}, {3.7660158498773413`*^9, 
+  3.7660158795126214`*^9}, {3.766073190940243*^9, 3.766073254757325*^9}},
+ CellLabel->"In[50]:=",ExpressionUUID->"4d8f76a9-e939-4078-b511-85d95302af5f"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddVel", "[", "z_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"VelPoints", ",", "z"}], "\[IndentingNewLine]", "]"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.766016207090577*^9, 3.766016208505912*^9}, {
+  3.766016240684391*^9, 3.766016247821384*^9}},
+ CellLabel->"In[51]:=",ExpressionUUID->"da91e2c6-378b-4433-b14d-5371652aabb8"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AddAccel", "[", "z_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"AccelPoints", ",", "z"}], "\[IndentingNewLine]", "]"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.766016253893453*^9, 3.76601626238338*^9}, {
+  3.7660636287946973`*^9, 3.766063629697815*^9}},
+ CellLabel->"In[52]:=",ExpressionUUID->"32bd7947-d06d-4a3f-ad6e-06160c32e0ad"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Helper", " ", "function", " ", "called", " ", "by", " ", "UpdateGraphic", 
+    " ", "to", " ", "update", " ", "LineData", " ", "with", " ", "the", " ", 
+    "new", " ", "ListLinePlot"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"UpdatePlot", "[", "]"}], ":=", 
+   RowBox[{"LineData", "=", 
+    RowBox[{"ListLinePlot", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"PosPoints", ",", "VelPoints", ",", "AccelPoints"}], "}"}], 
+      ",", 
+      RowBox[{"PlotLabels", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<Position\>\"", ",", "\"\<Velocity\>\"", ",", 
+         "\"\<Acceleration\>\""}], "}"}]}], ",", " ", 
+      RowBox[{"PlotLabel", "\[Rule]", "\"\<Motion\>\""}]}], 
+     "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.7660641845328674`*^9, 3.7660641986296897`*^9}, {
+   3.7660642640550003`*^9, 3.766064269819433*^9}, {3.7660648795553646`*^9, 
+   3.7660648957612467`*^9}, {3.7660650005995426`*^9, 3.766065008645415*^9}, {
+   3.7660650579923687`*^9, 3.766065068070609*^9}, {3.7660652222027516`*^9, 
+   3.766065228603053*^9}, {3.766065431908592*^9, 3.766065432099478*^9}, 
+   3.766065714275401*^9, 3.7660660945493383`*^9, {3.7660661764484744`*^9, 
+   3.766066176631877*^9}, {3.766066602167123*^9, 3.7660666174529285`*^9}, {
+   3.7660732443944197`*^9, 3.7660732910918503`*^9}},
+ CellLabel->"In[53]:=",ExpressionUUID->"8e054d04-e96b-4495-a95f-b680c6c4caf3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "Function", " ", "called", " ", "by", " ", "the", " ", 
+     "\"\<Show Graph In Unity\>\"", " ", "button", " ", "beneath", " ", "the",
+      " ", "initialization", " ", 
+     RowBox[{"cells", ".", " ", "Converts"}], " ", "the", " ", "ListLinePlot",
+      " ", "into", " ", "a", " ", "Texture2D", " ", "for", " ", "Unity", " ", 
+     "to", " ", "display"}], ",", " ", 
+    RowBox[{
+    "and", " ", "then", " ", "displays", " ", "the", " ", "graph", " ", "in", 
+     " ", 
+     RowBox[{"Unity", ".", "\[IndentingNewLine]", "This"}], " ", "was", " ", 
+     "initially", " ", "called", " ", "by", " ", "a", " ", "function", " ", 
+     "in", " ", "Unity"}], ",", " ", "however", ",", " ", 
+    RowBox[{
+    "that", " ", "resulted", " ", "in", " ", "an", " ", "instantaneous", " ", 
+     "crash", " ", "of", " ", "both", " ", "Mathematica", " ", "and", " ", 
+     "Unity"}], ",", " ", 
+    RowBox[{
+    "possibly", " ", "due", " ", "to", " ", "Unity", " ", "attempting", " ", 
+     "to", " ", "do", " ", "all", " ", "the", " ", "calculations", " ", "and",
+      " ", "conversions", " ", "within", " ", "one", " ", 
+     RowBox[{"frame", ".", " ", "Then"}], " ", "it", " ", "was", " ", 
+     "attempted", " ", "using", " ", 
+     RowBox[{"Dynamic", "[", "]"}]}], ",", " ", 
+    RowBox[{
+    "which", " ", "probably", " ", "would", " ", "work", " ", "if", " ", 
+     "you", " ", "happened", " ", "to", " ", "own", " ", "a", " ", 
+     RowBox[{"supercomputer", "."}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"UpdateGraphic", "[", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"ri", ",", "go", ",", "pan"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"go", "=", 
+       RowBox[{"FindUnityGameObject", "[", "\"\<GraphPanel\>\"", "]"}]}], ";",
+       "\[IndentingNewLine]", 
+      RowBox[{"pan", "=", 
+       RowBox[{"FindUnityComponent", "[", 
+        RowBox[{"go", ",", "\"\<Image\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"pan", "[", 
+        RowBox[{"[", "\"\<Enabled\>\"", "]"}], "]"}], "=", "True"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"UpdatePlot", "[", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ri", " ", "=", " ", 
+       RowBox[{"FindUnityComponent", "[", 
+        RowBox[{"\"\<PlotImage\>\"", ",", "\"\<RawImage\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"ri", "[", 
+        RowBox[{"[", "\"\<Enabled\>\"", "]"}], "]"}], "=", "True"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"DeleteUnityTexture2D", "[", 
+       RowBox[{"ri", "[", 
+        RowBox[{"[", "\"\<Texture\>\"", "]"}], "]"}], "]"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"SetProperty", "[", 
+       RowBox[{"ri", ",", 
+        RowBox[{"\"\<Texture\>\"", "\[Rule]", " ", 
+         RowBox[{"CreateUnityTexture2D", "[", 
+          RowBox[{"Image", "[", "LineData", "]"}], "]"}]}]}], "]"}]}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.766024152942625*^9, 3.766024157159935*^9}, {
+   3.766024239418172*^9, 3.766024250812932*^9}, {3.766024303073354*^9, 
+   3.766024305922452*^9}, {3.7660585836814413`*^9, 3.7660585945127964`*^9}, {
+   3.7660586465481358`*^9, 3.766058672090899*^9}, {3.7660587823744354`*^9, 
+   3.7660588008748136`*^9}, {3.766060732499374*^9, 3.7660607395894136`*^9}, {
+   3.7660608029882717`*^9, 3.766060892223349*^9}, {3.766060948966754*^9, 
+   3.766061061468602*^9}, {3.766063623691058*^9, 3.766063625961858*^9}, {
+   3.7660636713132796`*^9, 3.7660636838554554`*^9}, {3.7660638271595173`*^9, 
+   3.766063829796755*^9}, 3.766065120952182*^9, {3.7660666309966526`*^9, 
+   3.766066636530984*^9}, {3.7660671342616253`*^9, 3.7660671723074665`*^9}, {
+   3.7660672546003513`*^9, 3.7660672713281574`*^9}, {3.766067355962017*^9, 
+   3.7660673796714015`*^9}, {3.766067450367401*^9, 3.7660674511421213`*^9}, {
+   3.7660675541672173`*^9, 3.7660675898061323`*^9}, {3.7660676332764974`*^9, 
+   3.7660676779690943`*^9}, {3.7660732958805943`*^9, 
+   3.7660733499102287`*^9}, {3.7660733832962313`*^9, 3.7660736048395557`*^9}},
+ CellLabel->"In[54]:=",ExpressionUUID->"042645d8-57ce-4cd0-a5a2-bfb823494fdb"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+    "Function", " ", "called", " ", "by", " ", "the", " ", 
+     "\"\<Hide and Reset Graph In Unity\>\"", " ", "button", " ", "beneath", 
+     " ", "the", " ", "initialization", " ", 
+     RowBox[{"cells", ".", " ", "This"}], " ", "was", " ", "also", " ", 
+     "initially", " ", "handled", " ", "by", " ", "Unity"}], ",", " ", 
+    RowBox[{
+     RowBox[{
+     "but", " ", "it", " ", "seemed", " ", "to", " ", "be", " ", "more", " ", 
+      "natural", " ", "to", " ", "have", " ", "both", " ", "graph"}], "-", 
+     RowBox[{
+     "related", " ", "buttons", " ", "located", " ", "in", " ", "Mathematica",
+       " ", "if", " ", "one", " ", "of", " ", "them", " ", "had", " ", "to", 
+      " ", 
+      RowBox[{"be", "."}]}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"HideGraphic", "[", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"go", ",", "pan", ",", "ri"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ResetAccelPoints", "[", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ResetVelPoints", "[", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ResetPosPoints", "[", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"go", "=", 
+       RowBox[{"FindUnityGameObject", "[", "\"\<GraphPanel\>\"", "]"}]}], ";",
+       "\[IndentingNewLine]", 
+      RowBox[{"pan", "=", 
+       RowBox[{"FindUnityComponent", "[", 
+        RowBox[{"go", ",", "\"\<Image\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"pan", "[", 
+        RowBox[{"[", "\"\<Enabled\>\"", "]"}], "]"}], "=", "False"}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"ri", " ", "=", " ", 
+       RowBox[{"FindUnityComponent", "[", 
+        RowBox[{"\"\<PlotImage\>\"", ",", "\"\<RawImage\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"ri", "[", 
+        RowBox[{"[", "\"\<Enabled\>\"", "]"}], "]"}], "=", "False"}], ";"}]}],
+     "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.7660677211462374`*^9, 3.7660677618477974`*^9}, {
+  3.766071203554307*^9, 3.7660712282880154`*^9}, {3.76607159275622*^9, 
+  3.766071600793444*^9}, {3.766073355457567*^9, 3.766073376641497*^9}, {
+  3.7660736224874372`*^9, 3.7660737443528256`*^9}},
+ CellLabel->"In[55]:=",ExpressionUUID->"e04b21aa-3a06-4d23-b6c2-78bc6fde58dc"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{568, 772},
+WindowMargins->{{Automatic, -7}, {Automatic, 0}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 174, 3, 156, "Title",ExpressionUUID->"d140c120-0b25-439e-8ab1-dacfd14fdd54"],
+Cell[757, 27, 159, 3, 53, "Subtitle",ExpressionUUID->"469f5eec-b85e-4ba3-91ab-4ecb83ac333d"],
+Cell[919, 32, 3017, 46, 672, "Text",ExpressionUUID->"5c13bb2d-0951-4591-bbc6-e9017ae1e7c1"],
+Cell[CellGroupData[{
+Cell[3961, 82, 3014, 66, 368, "Input",ExpressionUUID->"4443e51f-0fd0-4f2b-9a45-2b50c8d07437",
+ InitializationCell->True],
+Cell[6978, 150, 1478, 23, 44, "Output",ExpressionUUID->"f5f388ff-fe8d-4f38-be73-9e7da34e52e5"],
+Cell[8459, 175, 1483, 23, 44, "Output",ExpressionUUID->"1467053d-d39a-430e-a300-b7ed9f0e2621"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9979, 203, 157, 3, 53, "Subsection",ExpressionUUID->"6cac3c09-8748-4513-8d05-4b824f551372"],
+Cell[10139, 208, 4571, 92, 314, "Input",ExpressionUUID->"037108af-6e7a-4fff-bb0b-9142f976fee0"],
+Cell[14713, 302, 576, 11, 48, "Input",ExpressionUUID->"d70e4bc5-f897-4688-a552-4c06977fc129"],
+Cell[15292, 315, 586, 13, 67, "Input",ExpressionUUID->"4ba801ba-fc97-4532-a3fc-bcf526c9f69a"],
+Cell[15881, 330, 293, 6, 28, "Input",ExpressionUUID->"2fc24077-1065-4cd0-84d1-9ba0e764f232"],
+Cell[16177, 338, 297, 6, 28, "Input",ExpressionUUID->"aa68553a-abff-4a74-83f6-e5957ff4e01e"],
+Cell[16477, 346, 914, 20, 105, "Input",ExpressionUUID->"4d8f76a9-e939-4078-b511-85d95302af5f"],
+Cell[17394, 368, 476, 11, 67, "Input",ExpressionUUID->"da91e2c6-378b-4433-b14d-5371652aabb8"],
+Cell[17873, 381, 481, 11, 67, "Input",ExpressionUUID->"32bd7947-d06d-4a3f-ad6e-06160c32e0ad"],
+Cell[18357, 394, 1463, 30, 124, "Input",ExpressionUUID->"8e054d04-e96b-4495-a95f-b680c6c4caf3"],
+Cell[19823, 426, 4262, 85, 428, "Input",ExpressionUUID->"042645d8-57ce-4cd0-a5a2-bfb823494fdb"],
+Cell[24088, 513, 2422, 53, 347, "Input",ExpressionUUID->"e04b21aa-3a06-4d23-b6c2-78bc6fde58dc"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

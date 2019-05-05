@@ -1,0 +1,5 @@
+   NET/Link is a Mathematica enhancement that integrates Microsoft's .NET platform and Mathematica.
+   You can use NET/Link to call .NET (specifically, the CLR) from Mathematica or call Mathematica from .NET.
+
+   Use is governed by the terms of the NET/Link license agreement, which can be found at
+   www.wolfram.com/solutions/mathlink/netlink.

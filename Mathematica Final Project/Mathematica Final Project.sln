@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematica Final Project", "Mathematica Final Project.csproj", "{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematica Final Project", "Mathematica Final Project.csproj", "{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematica Final Project", "Mathematica Final Project.csproj", "{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematica Final Project.Editor", "Mathematica Final Project.Editor.csproj", "{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematica Final Project.Editor", "Mathematica Final Project.Editor.csproj", "{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mathematica Final Project.Editor", "Mathematica Final Project.Editor.csproj", "{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9257573F-A4D0-71DD-62AF-A6D30DC0C17A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF9A2C-B081-2B3D-D651-0CC850CCEEBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
