@@ -1,6 +1,6 @@
 # Sail Simulator
 
-This project is a demonstration of what can be done with Mathematica 12's Unity integration. You will need both Unity and Mathematica 12 to be installed on your computer for this to work. If you don't have these, here's a demo video: https://www.youtube.com/watch?v=C_RSfQAHW6c
+This project is a demonstration of what can be done with Mathematica 12's Unity integration. You will need both Unity and Mathematica 12 to be installed on your computer for this to work. If you don't have these, [here's a demo video](https://www.youtube.com/watch?v=C_RSfQAHW6c).
 
 The basic outline of the project is as follows: In Unity, you type a valid function of two variables into the input box (using Mathematica syntax), and then a 3D mesh will appear in Unity based on the given function. The mesh that is generated is meant to be a stand-in for a "sail" made in that shape. You can click the "Enable/Disable Right/Left Wind" buttons in Unity to control where the "wind" is blown from. The "wind" in this project is represented by a flurry of small particles that are fired with a speed of 50 at your mesh (give them a few moments to reach the mesh). The current distance from the origin, velocity, and acceleration of the mesh are all displayed in the corner.
 
